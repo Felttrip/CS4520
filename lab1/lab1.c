@@ -176,12 +176,15 @@ int file_state(char* file_name){
 }
 
 /* user dialogue
- *
+ * meets required user prompting, only good for paths under 512 characters.
  *
  */
  void user_dialogue(void){
+ 	//space for file paths
  	char source_name[512];
  	char target_name[512];
+ 	
+ 	//get file paths from user
  	printf("Please enter the source path and file name.\n");
  	scanf("%511s",&source_name);
  	printf("Please enter the target path and file name.\n");
@@ -202,3 +205,4 @@ int print_usage(void){
 	printf("%s",usage);
 	return 0;
 }
+

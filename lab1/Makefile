@@ -8,6 +8,6 @@ all: copy
 clean:
 	$(CLEAN)
 
-copy: as1.c
+copy: lab1.c
 	$(CC) $^ -o $@
 
