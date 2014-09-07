@@ -11,10 +11,9 @@
  * Assumptions:    1)Input file name is lb1.input
  *		&		   2)Output file name should be lb1.output
  * Precautions	   3)Ensure that you have read and write permissions in the 
- *				   directory 
- * 				   4)
- *				   5)
+ *				     directory 
  **************************************************************************/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/types.h>
@@ -22,23 +21,6 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <string.h>
-/* In Section 2.3, we described a program that copies the contents of one file to a destination file. 
-   This program works by first prompting the user for the name of the source and destination files. 
-   Write this program using either the Windows or POSIX API. Be sure to include all necessary error 
-   checking, including ensuring that the source file exists.
-   Once you have correctly designed and tested the program, 
-   if you used a system that supports it, run the program using a utility that traces system calls. 
-   Linux systems provide the strace utility, and Solaris and Mac OS X systems use the dtrace command. 
-   As Windows systems do not provide such features, you will have to trace through the Windows version 
-   of this program using a debugger.
-*/
-
-/* Thoughts on usage
-  as1.c compiles to some copy file (copy)
-  copy <no args> -> prints help page
-  copy <onearg> -> prints usage and tells user to use copy with no args to get help page
-  copy <onearg> <twoarg>  if able to copy copys <onearg> to <twoarg> if it can't copy throws an error message to stderr stating why
-*/
 
 //Function prototypes
 int print_help(void);		//Help message explaining the programs usage
@@ -49,8 +31,8 @@ int copy(char*, char*);		//Does actual file copy after everything is good to go
 
 
 /* main
- * Checks for corret number of agruments and prints help if needed.
- * If correct number of arguments is passed, sends program to control.
+ * 1. Checks for corret number of agruments and prints help if needed.
+ * 2. If correct number of arguments is passed, sends program to control.
  */
 int main(int argc, char *argv[]){
 	//check for no args
@@ -102,42 +84,68 @@ int control(char* source, char* target){
 	  		printf("Target file already exists.\n");
 	  		break;
 	}
+	
 	//if source is good and target doesn't exits copy the file.
 	if((source_status == 0 || source_status == 3)&&(target_status == 1)){
 		copy_error = copy(source,target);
 	}
-	if(copy_error == -1){
-		printf("Error copying file\n");
+
+	//if there was an error copying tell the user
+	switch (copy_error){
+		case 0:
+			break;
+		case 1:
+			printf("Error opening source file.\n");
+			break;
+		case 2:
+			printf("Error creating target file.\n");
+			break;
+		case 3:
+			printf("Error copying source to target.\n");
+			break;
 	}
 	return 0;
 }
 
 /* copy
- *	
- *
+ * 1. Attempts to open/ create files
+ * 2. If successfull, copys the contents of source to target
  */
 int copy(char* source, char* target){
-	int *sourceFile;
-	int *targetFile;
-	ssize_t ret_in, ret_out;
+	int source_file;
+	int target_file;
+	ssize_t bytes_read;
+	ssize_t bytes_written;
 	int buffer_size = 1000;
     char buffer[buffer_size];
-	targetFile = open(target,O_WRONLY | O_CREAT, 0644);
-	sourceFile = open(source,O_RDONLY);
-	if(targetFile == -1 || sourceFile == -1){
-		return -1;
+
+    //open files
+	target_file = open(target,O_WRONLY | O_CREAT);
+	source_file = open(source,O_RDONLY);
+
+	//error if problems opening files
+	if(source_file == -1){
+		return 1;
 	}
+	if(target_file == -1){
+		return 2;
+	}
+	
+	//good open start copying
 	else{
-		while((ret_in = read (sourceFile, &buffer, buffer_size)) > 0){
-	            ret_out = write (targetFile, &buffer, (ssize_t) ret_in);
-	            if(ret_out != ret_in){
-	                return -1;
+		//while there are still bytes to read, read them to the buffer and write the buffer to the new file
+		while((bytes_read = read (source_file, &buffer, buffer_size)) > 0){
+	            bytes_written = write (target_file, &buffer, (ssize_t) bytes_read);
+	            //if the bytes read and the bytes written dont match up
+	            //stop copying and tell the user
+	            if(bytes_read != bytes_written){
+	                return 3;
 	            }
 	    }
 	}
     //close files
-    close(targetFile);
-    close(sourceFile);
+    close(target_file);
+    close(source_file);
 	return 0;
 }
 
@@ -169,8 +177,8 @@ int file_state(char* file_name){
 
 //Prints the help document
 int print_help(void){
-	char *help_message = "This is the copy command, it can be used to copy one file to another location.";
-	printf("%s\n",help_message);
+	char *help_message = "This is the copy command, it can be used to copy one file to another location.\n\n";
+	printf("%s",help_message);
 	print_usage();
  return 0;
 }
@@ -178,6 +186,6 @@ int print_help(void){
 //Prints the usage information for the prog
 int print_usage(void){
 	char *usage = "usage: copy source_file target_file\n\n";
-	printf(usage);
+	printf("%s",usage);
 	return 0;
 }

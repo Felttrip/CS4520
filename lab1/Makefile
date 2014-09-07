@@ -1,15 +1,13 @@
 
 CC= gcc
 
-CLEAN= rm -rf *.o copy
+CLEAN= rm -rf *.o copy *.output
 
 all: copy
 
 clean:
 	$(CLEAN)
 
-copy: as1.o
+copy: as1.c
 	$(CC) $^ -o $@
 
-as1.o: as1.c 
-	$(CC) -c $^
