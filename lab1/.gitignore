@@ -1,3 +1,4 @@
 copy
 *.input
 *.out
+*.output
