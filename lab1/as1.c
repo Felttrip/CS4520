@@ -28,7 +28,7 @@ int print_usage(void);		//Quick usage help
 int control(char*,char*);	//Controls errors and what not
 int file_state(char*);		//Checks file state and returns state
 int copy(char*, char*);		//Does actual file copy after everything is good to go
-
+void user_dialogue(void);
 
 /* main
  * 1. Checks for corret number of agruments and prints help if needed.
@@ -37,11 +37,11 @@ int copy(char*, char*);		//Does actual file copy after everything is good to go
 int main(int argc, char *argv[]){
 	//check for no args
 	if(argc == 1){
-		print_help();
+		user_dialogue();
 	}
 	//one arg 
 	else if(argc == 2 || argc > 3){
-		print_usage();
+		print_help();
 	}
 	//two args
 	else if(argc == 3){
@@ -108,7 +108,7 @@ int control(char* source, char* target){
 }
 
 /* copy
- * 1. Attempts to open/ create files
+ * 1. Attempts to open / create files
  * 2. If successfull, copys the contents of source to target
  */
 int copy(char* source, char* target){
@@ -175,9 +175,22 @@ int file_state(char* file_name){
 	}
 }
 
+/* user dialogue
+ *
+ *
+ */
+ void user_dialogue(void){
+ 	char source_name[512];
+ 	char target_name[512];
+ 	printf("Please enter the source path and file name.\n");
+ 	scanf("%511s",&source_name);
+ 	printf("Please enter the target path and file name.\n");
+ 	scanf("%511s",target_name);
+ 	control(source_name,target_name);
+ }
 //Prints the help document
 int print_help(void){
-	char *help_message = "This is the copy command, it can be used to copy one file to another location.\n\n";
+	char *help_message = "This is the copy command, it can be used to copy one file to another location.\nUse copy with no arguments to initiate a dialogue to input source and target destinations or use as follows.\n\n";
 	printf("%s",help_message);
 	print_usage();
  return 0;

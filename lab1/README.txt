@@ -10,9 +10,10 @@ Use make to create program "copy".
 Use make clean to remove program "copy", any .o files created, and all files with .output extension.
 
 Usage:
-(No arguments)  copy will print a short help page and usage.
-(One argument)  copy will print usage.
-(Two arguments) copy will attempt to copy the source file to the requested destination.
+(No arguments)     copy begin a user dialogue.
+(One argument)     copy will print help and usage.
+(Two arguments)    copy will attempt to copy the source file to the requested destination.
+(Three+ arguments) copy will print help and usage.
 
 Errors:
 Copy will throw errors for:
