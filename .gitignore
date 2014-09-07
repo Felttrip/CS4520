@@ -4,3 +4,7 @@
 #Object files
 *.o
 
+#archived folders
+*.zip
+*.rar
+*.tar.gz
