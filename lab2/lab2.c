@@ -9,8 +9,8 @@
  * Question no:	   3.22        
  *
  * Assumptions:    1) Link with -lrt when compiling
- *		&		   2)
- * Precautions	   3)
+ *		&		   2) Numbers less than 715827882 will be used
+ * Precautions	   3) There won't be more than 500 interations of the Collatz conjecture
  * 				   4)
  *				   5) 
  **************************************************************************/
@@ -63,6 +63,7 @@ int main(int argc, char **argv)
 	pid = fork();
 	//child
 	if (pid == 0) {
+		//get input
 		int input = 0;
 		printf("Please enter a positive integer less than 715827882 for the Collatz conjecture.\n");
 		scanf("%d",&input);
@@ -77,17 +78,21 @@ int main(int argc, char **argv)
 			shm_unlink("/sharedmemory");
 			return -1;
 		}
+		//Collatz conjecture math
 		int i = 0;
 		do{
-			addr[i] = input;
+			//store input
+				addr[i] = input;
+			//evens
 			if(input%2 == 0){
 				input = input/2;
 			}
-			else if (input!=1){
+			//odds not = 1
+			else if (input%2>0){
 				input = 3*input+1;
 			}
-			i++;
-			//edge case
+			i++;			
+			//edge case to get 1 in array at the end
 			if(input == 1){
 				addr[i] = input;	
 			}
@@ -95,7 +100,9 @@ int main(int argc, char **argv)
 	}
 	//parent
 	else if (pid > 0) { 
+		//wait for child
 		wait(NULL);
+		//print results
 		int i = 0;
 		while(addr[i] > -1){
 			printf("%d ",addr[i]);
@@ -104,9 +111,7 @@ int main(int argc, char **argv)
 		printf("\n");
 		
 	}
-
 	//ensure you use this statement at each place your program exits
     shm_unlink("/sharedmemory");
-	
     return 0;
 }
