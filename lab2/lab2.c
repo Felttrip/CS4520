@@ -24,9 +24,23 @@
 #include <sys/mman.h>
 int main(int argc, char **argv)
 {
-	//initializations
-	
-	//error checks
+	if(argc>2 || argc <2){
+		printf("Error improper arguments, program takes one integer as an argument.\n");
+		return -1;
+	}
+	//get input
+	int input = atoi(argv[1]);
+	//error checking
+	if(input < 1){
+		printf("Error, not a possitive integer, quitting\n");
+		shm_unlink("/nctvycsharedmemory");
+		return -1;
+	}
+	if(input > 715827882){
+		printf("Error, numbers larger than 715827882 are not supported, quitting\n");
+		shm_unlink("/nctvycsharedmemory");
+		return -1;
+	}
 	
 	//create a shared memory segment, fill the parameters
     int fd = shm_open("/nctvycsharedmemory", O_CREAT | O_RDWR, S_IRUSR | S_IWUSR);
@@ -63,21 +77,6 @@ int main(int argc, char **argv)
 	pid = fork();
 	//child
 	if (pid == 0) {
-		//get input
-		int input = 0;
-		printf("Please enter a positive integer less than 715827882 for the Collatz conjecture.\n");
-		scanf("%d",&input);
-		//error checking
-		if(input < 1){
-			printf("Error, not a possitive integer, quitting\n");
-			shm_unlink("/nctvycsharedmemory");
-			return -1;
-		}
-		if(input > 715827882){
-			printf("Error, numbers larger than 715827882 are not supported, quitting\n");
-			shm_unlink("/nctvycsharedmemory");
-			return -1;
-		}
 		//Collatz conjecture math
 		int i = 0;
 		do{
