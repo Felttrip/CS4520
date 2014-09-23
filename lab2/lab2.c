@@ -29,18 +29,18 @@ int main(int argc, char **argv)
 	//error checks
 	
 	//create a shared memory segment, fill the parameters
-    int fd = shm_open("/sharedmemory", O_CREAT | O_RDWR, S_IRUSR | S_IWUSR);
+    int fd = shm_open("/nctvycsharedmemory", O_CREAT | O_RDWR, S_IRUSR | S_IWUSR);
 	//check if shared memory segment is created successfully
 	if (fd == -1){
 		printf("Error creating shared memory\n");
-		shm_unlink("/sharedmemory");
+		shm_unlink("/nctvycsharedmemory");
 		return -1;
 	}
 
 	//allocate page size and check for errors, fill the parameters
     if (ftruncate(fd, sizeof(int)) == -1){
     	printf("error allocating page size\n");
-    	shm_unlink("/sharedmemory");
+    	shm_unlink("/nctvycsharedmemory");
     	return -1;
     }
 	
@@ -55,7 +55,7 @@ int main(int argc, char **argv)
 	//check if address valid
 	if(addr == MAP_FAILED){
 		printf("Invalid address\n");
-		shm_unlink("/sharedmemory");
+		shm_unlink("/nctvycsharedmemory");
 		return -1;
 	}
 	//create child process and write rest of the logic
@@ -70,12 +70,12 @@ int main(int argc, char **argv)
 		//error checking
 		if(input < 1){
 			printf("Error, not a possitive integer, quitting\n");
-			shm_unlink("/sharedmemory");
+			shm_unlink("/nctvycsharedmemory");
 			return -1;
 		}
 		if(input > 715827882){
 			printf("Error, numbers larger than 715827882 are not supported, quitting\n");
-			shm_unlink("/sharedmemory");
+			shm_unlink("/nctvycsharedmemory");
 			return -1;
 		}
 		//Collatz conjecture math
@@ -112,6 +112,6 @@ int main(int argc, char **argv)
 		
 	}
 	//ensure you use this statement at each place your program exits
-    shm_unlink("/sharedmemory");
+    shm_unlink("/nctvycsharedmemory");
     return 0;
 }
