@@ -24,6 +24,7 @@
 #include <sys/mman.h>
 int main(int argc, char **argv)
 {
+	//check for args
 	if(argc>2 || argc <2){
 		printf("Error improper arguments, program takes one integer as an argument.\n");
 		return -1;
