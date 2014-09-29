@@ -1,6 +1,6 @@
 /***************************************************************************
- * Name:           
- * Pawprint:         
+ * Name:           Nathaniel Thompson
+ * Pawprint:       NCTVYC
  * Course:         CS 4520
  * Assignment#:    Lab 3
  *
@@ -17,39 +17,71 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <pthread.h>
-
+#define ARRAY_SIZE 51
 //define global variable
-
+long int fibSequence[ARRAY_SIZE];
 //define function that the thread runs
-
+void *fibThread(void *param);
 //define main
-int sum; /* this data is shared by the thread(s) */
-void *runner(void *param); /* threads call this function */
-
 int main(int argc, char *argv[]){ 
-	pthread_t tid; /* the thread identifier */
-	pthread_attr_t attr; /* set of thread attributes */
+	//thread idenrifier and attributes
+	pthread_t threadId;
+	pthread_attr_t threadAttributes;
+
+	//check input for correct args and size
 	if (argc != 2) {
 		fprintf(stderr,"usage: a.out <integer value>\n"); 
 		return -1;
 	}
-	if(atoi(argv[1]) < 0) {
-		fprintf(stderr,"%d must be >= 0\n",atoi(argv[1])); 
+	if(atoi(argv[1]) <= 0) {
+		fprintf(stderr,"Input must be > 0\n"); 
 		return -1;
 	}
-	/* get the default attributes */
-	pthread_attr_init(&attr);
-	/* create the thread */
-	pthread_create(&tid,&attr,runner,argv[1]); /* wait for the thread to exit */
-	printfthread_join(tid,NULL); printf("sum = %d\n",sum);
+	if(atoi(argv[1]) > 50) {
+		fprintf(stderr,"Input must be <= 50\n"); 
+		return -1;
+	}
+
+	//Use default attributes
+	pthread_attr_init(&threadAttributes);
+
+	//create thread begin controll in fibThread 
+	pthread_create(&threadId,&threadAttributes,fibThread,argv[1]); 
+	
+	//wait for thread to finish
+	pthread_join(threadId,NULL);
+
+	//print fib sequence
+	int i = 0;
+	while(fibSequence[i]!=-1){
+		printf("%ld, ",fibSequence[i]);
+		i++;	
+	}
+	printf("\n"); 
+	
 
 }  
-/* The thread will begin control in this function */
-void *runner(void *param){ 
-	int i, upper = atoi(param); 
-	sum = 0;
-    for (i = 1; i <= upper; i++){
-       sum += i;
-    }
+
+//Where the thread starts
+void *fibThread(void *param){ 
+	//local vars for calcularing
+	int i;
+	int sizeOfSequence = atoi(param); 
+	long int currentNumber = 1;
+	long int pastNumber = 0;
+	//iniitalize the array to -1
+	for(i=0;i<ARRAY_SIZE;i++){
+		fibSequence[i]=-1;
+	}
+	//calculate the fib sequence for a given size
+	fibSequence[0] = 0;
+	if(sizeOfSequence > 1){
+	 	fibSequence[1] = 1;
+	    for (i = 2; i < sizeOfSequence; i++){
+	    	fibSequence[i] = currentNumber + pastNumber;
+	       	pastNumber = currentNumber;
+	    	currentNumber = fibSequence[i];
+	    }
+	}
 	pthread_exit(0);
 }
