@@ -1,6 +1,6 @@
 /***************************************************************************
- * Name:
- * Userid:
+ * Name:           Nathaniel Thompson
+ * Userid:         nctvyc
  * Course:         CS 4520
  * Assignment#:    Lab 4
  *
@@ -31,7 +31,7 @@
 #define MAX_RESOURCES 5
 
 //global variable declaration for available_resources
-sig_atomic_t available_resources = MAX_RESOURCES;
+int available_resources = MAX_RESOURCES;
 //other global declarations
 //Mutex
 pthread_mutex_t leMutex = PTHREAD_MUTEX_INITIALIZER;
