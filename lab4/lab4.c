@@ -11,9 +11,9 @@
  *  Assumptions  1) Which data is involved in race condition ?
  *                  The resources variable is involved in the race condition.
  *	 &		       2) When does the race condition occur ?
-                    The race condition occurs when two threads access the resources
-                    at the same time and attempt to incement and decrement the variable
-                    at the time.
+ *                  The race condition occurs when two threads access the resources
+ *                  at the same time and attempt to incement and decrement the variable
+ *                  at the same time.
  *	Precautions	 3) MAX_RESOURCES should defines the max number of resources
  * 				       4) NUM_PROCESSES should defines the no of threads to create
  *				       5) cc -pthread -lpthread lb5.c
@@ -22,8 +22,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <pthread.h>
-#include <time.h> //Included only to create a random seed for rand()
-#include <errno.h>
+#include <time.h>  //Included only to create a random seed for rand()
+
 //define NUM_PROCESSES
 #define NUM_PROCESSES 10
 
@@ -46,23 +46,31 @@ int decrease_count(int);
 int main(void){
   //initialize random seed
   srand (time(NULL));
+
+  //initial vars
   int i = 0;
   int resources_requested = 0;
+
+  //set up threads
   pthread_t threads[NUM_PROCESSES];
   pthread_attr_t threadAttributes;
+
   //Use default attributes
   pthread_attr_init(&threadAttributes);
+
+  //create threads
   for(i=0;i<NUM_PROCESSES;i++){
     resources_requested = (rand()%MAX_RESOURCES)+1;
     pthread_create(&threads[i],&threadAttributes,workerThread,(void *)resources_requested);
   }
 
+  //wait for threads to finish
   for(i=0;i<NUM_PROCESSES;i++){
     pthread_join(threads[i],NULL);
   }
 
 
-  //distroy mutex
+  //distroy mutex and exit
   pthread_mutex_destroy(&leMutex);
   pthread_exit(NULL);
   return 0;
@@ -76,7 +84,7 @@ void* workerThread(void *resources){
     pthread_mutex_lock(&leMutex);
     //check status
     if((int)available_resources<(int)resources){
-     //release mutex if we can't use it
+     //release mutex if there are not enough resources
      pthread_mutex_unlock(&leMutex);
     }
     else{
@@ -89,6 +97,7 @@ void* workerThread(void *resources){
     }
   }while(1);
 
+  //do that random sleep
   sleep(rand()%5);
 
   //Give the resources back, less strict because we are just returning.
