@@ -3,7 +3,7 @@
 * Userid:         nctvyc
 * Course:         CS 4520
 * Assignment#:    Lab 6
-*
+* Reciept:        f567b47fceefefe658849aca249305ea
 * File name:      lab6.c
 *
 * Question no:	   9.39
