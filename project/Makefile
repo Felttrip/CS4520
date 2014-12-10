@@ -5,7 +5,7 @@
 # Macros to make sure we use the system's C compiler and options to
 # create a source listing and additional link libraries.
 CC = cc
-OPTS = -pthread -lpthread #-lrt
+OPTS = -pthread -lpthread -lrt
 
 # Default action is to create three processing modules.
 #all:	producer consumer parent # alternate means to build the code
