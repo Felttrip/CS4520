@@ -88,7 +88,7 @@ int main(int argc, char *argv[]){
    setbuf(stderr, NULL);        /* turn off buffering of stderr */
 
 
-   int fd = shm_open("nctvyc", O_RDWR);
+   int fd = shm_open("nctvyc", O_RDWR, S_IRUSR | S_IWUSR);
    if (fd == -1){
        printf("Producer Error creating shared memory\n");
        perror("shm_open");
