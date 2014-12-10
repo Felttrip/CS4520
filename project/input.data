@@ -1,0 +1,116 @@
+ 107	Wow, you wasted an entire section on that? Yep, I can't stress enough how 
+  63	    * X-to-Y model. The mapping between LWPs and Threads.
+  22	We will dive into the world of threads with some a little bit of "theory"
+  23	first.  We will examine thread synchronization primitives and then a tutorial
+  56	Before we can dive into the details of how threads are supported, we need to
+  30  ####################################################################
+  39  ####################################################################
+   3                    The Beginning of the End
+ 112  $$$$$$$$$$$$$$$$$$The End of the Beginning$$$$$$$$$$$$$$$$$$$$$$$$$$
+  47  ####################################################################
+  55  ####################################################################
+  76	Linux uses the one-to-one model. Each thread is mapped to a single LWP. Why
+  72	Solaris uses the many-to-many model. CPUs are mapped to any number of LWPs
+  69	    * Unbound threads have process contention scope, in other words, these
+  87	thread type for the job.
+  17	However, times have changed and many papers have been written on
+ 102	    Yes, threads are great... for the right tasks! Don't waste your time
+  90	    * Thread-safe means that the program protects shared data, possibly
+  77	is this approach favored in Linux over the many-to-many model? Linux LWPs are
+  91	      through the use of mutual exclusion
+  40	Now that we have pictures of dancing needles in our heads, lets move onto
+  29	    Isn't that something you put through an eye of a sewing needle?  Yes.
+  54	different technique to support threads.
+  50	not support threads. Fortunately most modern Operating Systems support 
+ 110     
+  53	few, support multithreaded programs. However, each Operating System uses a 
+  62	      also sometimes referred to as kernel threads.
+  18	multithreading.  Some advocate the use of threads, while others do not. With
+  74	for slices of CPU time.
+  81	"processes" scheduled which are in the same thread family as the currently
+  92	    * Reentrant code means that a program can have more than one thread
+  12	a program on a uniprocessor machine in most cases does not yield enough
+ 104	event-based programming is the better route, or just plain, sequential, and 
+   1	      Multithreaded Programming :: Improving Performance through Threads
+  45	blown processes, but are smaller portions of the process running concurrently
+  82	running process.
+ 108	important picking the right tool for the job is.
+  15	Parallelizing our thoughts does not come naturally nor is it an easy task.
+  37	doing other useful work even if the other needle took 4 hours to sew on a 
+   5	sequential or serialized?  Simply put, code is executed one instruction after
+  86	either one. Each scenario demands a thorough analysis to select the right
+  11	dominance of uniprocessing machines available to programmers. Multithreading 
+  32	    Think of sewing needles as the CPUs (or LWPs) and the threads in a 
+  60	     number of LWPs is usually greater than the number of CPUs in the system.
+  97	      subset of Concurrency. Parallelism implies simultaneous running of code
+   6	the next in a monolithic fashion, with no regard to the many possible
+  35	both needles at the same time. Taking this analogy a little further, if one 
+  85	your multithreaded program. There is no general rule when it comes to using
+  41	something more concrete. A thread is a sequence of instructions that can be
+  99	      that many tasks can run in any order and possibly in parallel.
+  34	take longer to finish the job than if you split the thread into two and used 
+  59	    * Lightweight Process (LWP) can be thought of as a virtual CPU where the
+  78	really lightweight and thus LWP creation is not as expensive as it is in
+  61	      Thread libraries communicate with LWPs to schedule threads. LWPs are
+ 101	Part IV :: Threads Rule!
+  10	Why is it that most programs are sequential? One guess could be the relative
+  98	     (which is impossible on uniprocessor machines) while Concurrency implies
+  27	                       What is a thread?
+ -10$$$$                       What is a process?
+  42	executed in parallel with other threads [wikipedia.com]. They are not
+  46	(or in parallel). Hence, the term lightweight is used.
+  80	multiprocess in Linux is that the scheduler (2.4) gives a 1 point boost to
+  19	the increasing popularity of Symmetric-Multiprocessing machines, programming
+  48	Part II :: Operating System Support
+  89	Part III :: Other Terms
+   8	degraded if the program performs a blocking call.
+  28	Part I :: Definition
+  24	on how to use POSIX pthreads. Finally, we will finish off with thread
+  36	needle had to sew on a button (blocking I/O), the other needle could continue 
+  13	performance gains to merit days, weeks, or months worth of work to thread
+  52	Solaris, FreeBSD, Linux, AIX, HP-UX, IRIX, and Windows NT, just to name a 
+  57	get familiarized with a few terms.
+  51	threads, either with their own thread library or through POSIX pthreads. Sun 
+  31	How does it relate to programming then?
+  44	recursive definition but it makes sense. Threads of a program are not full-
+  84	Moreover, creating bound or unbound threads can greatly impact performance of
+  64	    * Contention Scope is how threads compete for system resources (e.g.
+  67	      threads contend with other processes on the entire system (and thus are
+  93	      executing concurrently
+  96	    * Concurrency vs. Parallelism - They are not the same! Parallelism is a
+   4	    Most code written today is sequential. What do we mean by the term 
+  20	multithreaded code is a skill worth learning.
+ 105	no-frills code can do the job just right.
+  49	    You cannot expect a multithreaded program to run on a kernel that does 
+  95	      (e.g. can be called from a signal handler)
+  68	      scheduled by the kernel)
+  38	single button.  If you only used one needle, you would be ~4 hours behind!
+  43	processes, but rather lightweight threads of execution. This seems like a
+  66	    * Bound threads have system-wide contention scope, in other words, these
+   7	resources available to the program. Overall performance can be serverely
+  94	    * Async-safe means that a function is reentrant while handling a signal
+  33	program as the fiber. If you had two needles but only one thread, it would 
+  73	which are then mapped to any number of threads. The kernel schedules the LWPs
+  70	      threads are scheduled by the library onto available LWPs
+ 103	multithreading a program that isn't worth multithreading. Sometimes 
+  14	code.  Another guess is that most of us think in a sequential manner.
+  79	Solaris. Another bonus to make your program multithreaded rather than
+  25	performance and a brief overview of multiprocess programming.
+ 100	
+ 106	
+  16	
+  21	
+  26	
+   2	   (http://vergil.chemistry.gatech.edu/resources/programming/threads.htm)
+   3	
+  30	
+  39	
+  47	
+  55	
+  58	
+  65	      scheduling)
+  71	
+  75	
+  83	
+  88	
+   9	
